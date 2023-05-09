@@ -1,0 +1,133 @@
+﻿@using Newtonsoft.Json;
+@using PagedList.Core.Mvc
+@using System.Text;
+@using BookStore.Extention;
+@model PagedList.Core.IPagedList<BookStore.Models.Payment>
+
+@{
+
+    int CurrentPage = ViewBag.CurrentPage != null ? (int)ViewBag.CurrentPage : 1;
+    ViewData["Title"] = "List payments" + CurrentPage;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="page-header">
+    <h2 class="header-title">Book List</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">List Customers : Page @CurrentPage</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+
+            <div class="row m-b-30">
+                <div class="col-lg-12">
+
+                    <div class="d-md-flex">
+                        <a class="btn btn-primary" asp-area="Admin" asp-controller="Payments" asp-action="Create">
+                            <i class="anticon anticon-plus-circle m-r-5"></i>
+                            <span>Add new</span>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover e-commerce-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>PaymentMethod</th>
+                            <th>PaymentDescription</th>
+                            <th>PaymentInfo</th>
+                            <th>Created</th>
+                            <th>Update</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.PaymentId
+                                    </td>
+                                    <td>
+                                        @item.PaymentMethod
+                                    </td>
+                                    <td>
+                                        @item.PaymentDescription
+                                    </td>
+                                    <td>
+                                        @Html.Raw(item.PaymentInfo)
+                                    </td>
+                                    <td>
+                                        @item.Created
+                                    </td>
+                                    <td>
+                                        @item.Updated
+                                    </td>
+
+
+                                    <td>
+                                        <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="Payments" asp-action="Details" asp-route-id="@item.PaymentId">Detail</a>
+                                        <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="Payments" asp-action="Edit" asp-route-id="@item.PaymentId">Edit</a>
+                                        <a class="btn btn-success btn-tone m-r-5" asp-area="Admin" asp-controller="Payments" asp-action="Delete" asp-route-id="@item.PaymentId">Delete</a>
+                                    </td>
+                                </tr>
+
+
+                            }
+                        }
+
+                        </td>
+
+                    </tbody>
+                </table>
+                <div class="pagination-container">
+                    <p class="pagination-info">Page @Model.PageNumber of @Model.PageCount, showing @Model.TotalItemCount items</p>
+                    <ul class="pagination">
+                        @if (Model.HasPreviousPage)
+                        {
+                            <li class="page-item"><a href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" class="page-link">&laquo; Previous</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
+                        }
+
+                        @for (int i = 1; i <= Model.PageCount; i++)
+                        {
+                            if (i == Model.PageNumber)
+                            {
+                                <li class="page-item active"><span class="page-link">@i</span></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a href="@Url.Action("Index", new { page = i })" class="page-link">@i</a></li>
+                            }
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <li class="page-item"><a href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" class="page-link">Next &raquo;</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                        }
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+    </div>

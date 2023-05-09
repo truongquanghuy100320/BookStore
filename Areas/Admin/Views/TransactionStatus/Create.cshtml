@@ -1,0 +1,67 @@
+﻿@model BookStore.Models.TransactionStatus
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" name="form" onsubmit="return validateForm()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <div id="paymentMethodError" class="text-danger"></div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <div id="paymentDescriptionError" class="text-danger"></div>
+            </div>         
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+
+
+
+    <script>
+        function validateForm() {
+            var paymentMethod = document.forms["form"]["Description"].value;
+            var paymentDescription = document.forms["form"]["Status"].value;
+
+            var paymentMethodError = document.getElementById("paymentMethodError");
+            var paymentDescriptionError = document.getElementById("paymentDescriptionError");
+
+            if (paymentMethod == "") {
+                paymentMethodError.innerHTML = "Please enter a payment method";
+                return false;
+            } else {
+                paymentMethodError.innerHTML = "";
+            }
+
+            if (paymentDescription == "") {
+                paymentDescriptionError.innerHTML = "Please enter a payment description";
+                return false;
+            } else {
+                paymentDescriptionError.innerHTML = "";
+            }
+
+           
+        }
+    </script>
+}

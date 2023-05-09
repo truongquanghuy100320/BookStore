@@ -1,0 +1,554 @@
+﻿@model BookStore.Models.Book
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .tg-bookscategories {
+        margin-bottom: 0; /* ngăn cách dưới */
+    }
+
+        .tg-bookscategories + h5 {
+            border-top: 1px solid #ccc; /* đường thẳng */
+            padding-top: 10px; /* khoảng cách giữa đường thẳng và tiêu đề */
+            margin-top: 20px; /* khoảng cách giữa phần tử <ul> và <h5> */
+        }
+
+
+
+    ul.tg-productinfo {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        ul.tg-productinfo li {
+            padding: 10px 0;
+            border-top: 1px solid #ccc;
+        }
+
+            ul.tg-productinfo li:first-child {
+                border-top: none;
+            }
+
+            ul.tg-productinfo li:nth-child(even) {
+                background-color: #f5f5f5;
+            }
+
+        ul.tg-productinfo span:first-child {
+            width: 150px;
+            display: inline-block;
+            color: #777;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        ul.tg-productinfo span:last-child {
+            color: #333;
+        }
+
+
+    .swiper-slide1 {
+        width: 30%;
+        margin: 0 10px;
+    }
+
+
+
+.cart-plus-minus-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+ .cart-plus-minus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 120px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0 10px;
+}
+
+.cart-plus-minus-btn {
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #555;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.cart-plus-minus-btn:hover,
+.cart-plus-minus-btn:focus {
+  background-color: #eee;
+}
+
+.cart-plus-minus-btn:active {
+  transform: scale(0.9);
+}
+
+.cart-plus-minus-box {
+  width: 50px;
+  height: 30px;
+  border: none;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+    
+</style>
+<main class="main-content">
+    <div class="breadcrumb-area breadcrumb-height" data-bg-image="~/assets/images/breadcrumb/bg/1-1-1920x373.jpg">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-item">
+                        <h2 class="breadcrumb-heading">Book Details</h2>
+                        <ul>
+                            <li>
+                                <a asp-controller="Home" asp-action="Index">Home <i class="pe-7s-angle-right"></i></a>
+                            </li>
+                            <li>
+                                <a asp-controller="Book" asp-action="Index">Shop Books <i class="pe-7s-angle-right"></i></a>
+                            </li>
+                            <li style="color:red;">@Html.Raw(Model.Name)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="single-product-area section-space-top-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="single-product-img">
+                        <div class="swiper-container single-product-slider">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <a href="~/images/tours/@Model.Image" class="single-img gallery-popup">
+                                        <img class="img-full" src="~/images/tours/@Model.Image" alt="Product Image">
+                                    </a>
+                                </div>
+                                @*<div class="swiper-slide">
+                                <a href="assets/images/product/large-size/2-2-555x645.jpg" class="single-img gallery-popup">
+                                <img class="img-full" src="assets/images/product/large-size/2-2-555x645.jpg" alt="Product Image">
+                                </a>
+                                </div>
+                                <div class="swiper-slide">
+                                <a href="assets/images/product/large-size/2-3-555x645.jpg" class="single-img gallery-popup">
+                                <img class="img-full" src="assets/images/product/large-size/2-3-555x645.jpg" alt="Product Image">
+                                </a>
+                                </div>
+                                <div class="swiper-slide">
+                                <a href="assets/images/product/large-size/2-4-555x645.jpg" class="single-img gallery-popup">
+                                <img class="img-full" src="assets/images/product/large-size/2-4-555x645.jpg" alt="Product Image">
+                                </a>
+                                </div>*@
+                            </div>
+                            <!-- Add Pagination -->
+                            <div class="swiper-pagination"></div>
+                        </div>
+                       <div class="swiper-container single-product-thumbs pt-6">
+                        <div class="swiper-wrapper">
+                        @*<a href="javascript:void(0)" class="swiper-slide">
+                        <img class="img-full" src="assets/images/product/large-size/2-1-555x645.jpg" alt="Product Thumnail">
+                        </a>
+                        <a href="javascript:void(0)" class="swiper-slide">
+                        <img class="img-full" src="assets/images/product/large-size/2-2-555x645.jpg" alt="Product Thumnail">
+                        </a>
+                        <a href="javascript:void(0)" class="swiper-slide">
+                        <img class="img-full" src="assets/images/product/large-size/2-3-555x645.jpg" alt="Product Thumnail">
+                        </a>
+                        <a href="javascript:void(0)" class="swiper-slide">
+                        <img class="img-full" src="assets/images/product/large-size/2-4-555x645.jpg" alt="Product Thumnail">
+                        </a>*@
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 pt-9 pt-lg-0">
+                    <div class="single-product-content">
+                        <ul class="tg-bookscategories">
+                            <li><a href="javascript:void(0);">@Model.NameCate</a></li>
+                        </ul>
+                        <div class="tg-sectionhead" style="border-top: 1px solid #ccc;">
+                            <h2>@Html.Raw(Model.Name)</h2>
+                        </div>
+
+                        <div class="price-box pb-1">
+                            By: @Model.NameAuthor
+                        </div>
+                        <div class="price-box pb-1 product-title">
+                            @Html.Raw(Model.Title)
+                        </div>
+                        <div class="price-box pb-1 product-price">
+                            <span class="new-price text-danger">Price: @string.Format("{0:#,##0} VNĐ", Model.Price)</span>
+                        </div>
+
+                        <div class="price-box pb-1 ">
+                            Status:  @(Model.Status ?? false ? "Stocking" : "Out of stock")
+                        </div>
+
+
+                        <div class="tg-sectionhead" style="border-top: 1px solid #ccc;">
+                            <h4>Product Details</h4>
+                        </div>
+                        <ul class="tg-productinfo">
+                            @*                            <li><span>Format:</span><span>Hardback</span></li>
+                            <li><span>Pages:</span><span>528 pages</span></li>
+                            <li><span>Dimensions:</span><span>153 x 234 x 43mm | 758g</span></li>*@
+                            <li><span>Publication Date:</span><span>@Model.PublicationDate</span></li>
+                            <li><span>Publisher:</span><span>@Model.Publisher</span></li>
+                            <li><span>Language:</span><span>@Model.Language</span></li>
+                            <li><span>Illustrations note:</span><span>@Model.IllustrationsNote</span></li>
+                            <li><span>ISBN10:</span><span>@Model.Isbn10</span></li>
+                            <li><span>ISBN13:</span><span>@Model.Isbn13</span></li>
+                        </ul>
+                        <br />
+                        <div class="rating-box-wrap pb-7">
+                            <div class="rating-box">
+                                <ul>
+                                    <li><i class="pe-7s-star"></i></li>
+                                    <li><i class="pe-7s-star"></i></li>
+                                    <li><i class="pe-7s-star"></i></li>
+                                    <li><i class="pe-7s-star"></i></li>
+                                    <li><i class="pe-7s-star"></i></li>
+                                </ul>
+                            </div>
+                            <div class="review-status ps-4">
+                                <a href="javascript:void(0)">( 1 Customer Review )</a>
+                            </div>
+                        </div>
+
+                        <ul class="quantity-with-btn pb-7">
+                            <div class="cart-plus-minus-wrapper" >
+                                <button class="cart-plus-minus-btn" data-action="minus">-</button>
+                                <input id="txtsoLuong" name="txtsoLuong" class="cart-plus-minus-box" value="1" type="text">
+                                <button class="cart-plus-minus-btn" data-action="plus">+</button>
+                            </div>
+
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <li class="add-to-cart" style="margin-left: 20px;">
+                                <a class="btn btn-custom-size lg-size btn-primary btn-secondary-hover rounded-0" href="javascript:void(0)">Thêm vào giỏ hàng</a>
+                                <input hidden asp-for="Id" />
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="product-tab-area section-space-top-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav product-tab-nav product-tab-style-2" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="active btn btn-custom-size" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">
+                                Description
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="btn btn-custom-size" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">
+                                Reviews
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="btn btn-custom-size" id="shipping-tab" data-bs-toggle="tab" href="#shipping" role="tab" aria-controls="shipping" aria-selected="false">
+                                Shipping
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content product-tab-content">
+                        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                            <div class="product-description-body">
+                                <p class="short-desc mb-0">
+                                    @Model.Description
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                            <div class="product-review-body">
+                                <h4 class="heading mb-5">3 Review Items</h4>
+                                @*<ul class="user-info-wrap">
+                                <li>
+                                <ul class="user-info">
+                                <li class="user-avatar">
+                                <img src="assets/images/testimonial/user/1.png" alt="User Image">
+                                </li>
+                                <li class="user-comment">
+                                <div class="rating-box">
+                                <ul>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                </ul>
+                                </div>
+                                <div class="meta">
+                                <span><strong>Oscar -</strong> March 15, 2021</span>
+                                </div>
+                                <p class="short-desc mb-0">
+                                “Sed ligula sapien, fermentum id est eget,
+                                viverra auctor sem. Vivamus maximus enim vitae urna porta, ut
+                                euismod nibh lacinia ellentesque at diam voluptas quas nisi, culpa
+                                in accusantium“
+                                </p>
+                                </li>
+                                </ul>
+                                </li>
+                                <li>
+                                <ul class="user-info">
+                                <li class="user-avatar">
+                                <img src="assets/images/testimonial/user/1.png" alt="User Image">
+                                </li>
+                                <li class="user-comment">
+                                <div class="rating-box">
+                                <ul>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                </ul>
+                                </div>
+                                <div class="meta">
+                                <span><strong>Oscar -</strong> March 15, 2021</span>
+                                </div>
+                                <p class="short-desc mb-0">
+                                “Sed ligula sapien, fermentum id est eget,
+                                viverra auctor sem. Vivamus maximus enim vitae urna porta, ut
+                                euismod nibh lacinia ellentesque at diam voluptas quas nisi, culpa
+                                in accusantium“
+                                </p>
+                                </li>
+                                </ul>
+                                </li>
+                                <li>
+                                <ul class="user-info">
+                                <li class="user-avatar">
+                                <img src="assets/images/testimonial/user/1.png" alt="User Image">
+                                </li>
+                                <li class="user-comment">
+                                <div class="rating-box">
+                                <ul>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                <li><i class="pe-7s-star"></i></li>
+                                </ul>
+                                </div>
+                                <div class="meta">
+                                <span><strong>Oscar -</strong> March 15, 2021</span>
+                                </div>
+                                <p class="short-desc mb-0">
+                                “Sed ligula sapien, fermentum id est eget,
+                                viverra auctor sem. Vivamus maximus enim vitae urna porta, ut
+                                euismod nibh lacinia ellentesque at diam voluptas quas nisi, culpa
+                                in accusantium“
+                                </p>
+                                </li>
+                                </ul>
+                                </li>
+                                </ul>*@
+                                <div class="feedback-area pt-5">
+                                    <h2 class="heading mb-1">Add a review</h2>
+                                    <p class="short-desc mb-3">Your email address will not be published.</p>
+                                    <div class="rating-box">
+                                        <span>Your rating</span>
+                                        <ul class="ps-4">
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                            <li><i class="pe-7s-star"></i></li>
+                                        </ul>
+                                    </div>
+                                    <form class="feedback-form pt-8" action="#">
+                                        <div class="group-input">
+                                            <div class="form-field me-md-6 mb-6 mb-md-0">
+                                                <input type="text" name="name" placeholder="Your Name*" class="input-field">
+                                            </div>
+                                            <div class="form-field me-md-6 mb-6 mb-md-0">
+                                                <input type="text" name="email" placeholder="Your Email*" class="input-field">
+                                            </div>
+                                            <div class="form-field">
+                                                <input type="text" name="number" placeholder="Phone number" class="input-field">
+                                            </div>
+                                        </div>
+                                        <div class="form-field mt-6">
+                                            <textarea name="message" placeholder="Message" class="textarea-field"></textarea>
+                                        </div>
+                                        <div class="button-wrap mt-8">
+                                            <button type="submit" value="submit" class="btn btn-custom-size lg-size btn-secondary btn-primary-hover btn-lg rounded-0" name="submit">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+                        <div class="product-shipping-body">
+                        <h4 class="title">Shipping</h4>
+                        <p class="short-desc mb-4">
+                        The item will be shipped from China. So it need 15-20 days to
+                        deliver. Our product is good with reasonable price and we believe you will worth it.
+                        So please wait for it patiently! Thanks.Any question please kindly to contact us and
+                        we promise to work hard to help you to solve the problem
+                        </p>
+                        <h4 class="title">About return request</h4>
+                        <p class="short-desc mb-4">
+                        If you don't need the item with worry, you can contact us
+                        then we will help you to solve the problem, so please close the return request!
+                        Thanks
+                        </p>
+                        <h4 class="title">Guarantee</h4>
+                        <p class="short-desc mb-0">
+                        If it is the quality question, we will resend or refund to
+                        you; If you receive damaged or wrong items, please contact us and attach some
+                        pictures about product, we will exchange a new correct item to you after the
+                        confirmation.
+                        </p>
+                        </div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="product-slider-area section-space-top-95 section-space-bottom-100">
+        <div class="container">
+            <div class="section-title text-center pb-55">
+                <span class="sub-title text-primary">You Can Be Love It</span>
+                <h2 class="title mb-0">Related Book</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="swiper-slider-holder swiper-arrow">
+                        <div class="swiper-container product-slider border-issue">
+                            @if (ViewBag.Categories != null)
+                            {
+                                        <div class="swiper-wrapper">
+                                    @foreach (var category in ViewBag.Categories)
+                                    {
+                                        string url = $"/{category.Name}-{category.Id}.html";
+                                                        <div class="swiper-slide1">
+                                                            <div class="product-item">
+                                                                <div class="product-img img-zoom-effect">
+                                                                    <a href="single-product.html">
+                                                                        <img class="img-full" src="~/images/tours/@category.Image" style="width: 100%; height: 200px; object-fit: cover;" alt="Product Images">
+                                                                    </a>
+                                                                    <div class="product-add-action">
+                                                                        <ul>
+                                                                            <li>
+                                                                                        <a href="@url" >
+                                                                                    <i class="pe-7s-cart"></i>
+                                                                                             
+                                                                                </a>
+                                                                            </li>
+                                                                            <li>
+                                                                                        <a href="@url">
+                                                                                    <i class="pe-7s-shuffle"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="product-content texx">
+                                                                    <a class="product-name" href="single-product.html">@Html.Raw(category.Name)</a>
+                                                                    <a class="product-name">@category.NameCate</a>
+                                                                    <div class="price-box pb-1">
+                                                                        <span class="new-price">@string.Format("{0:#,##0} VNĐ", category.Price)</span>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                    }
+                                        </div>
+
+                            }
+
+
+                        </div>
+                        <!-- Add Arrows -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts{
+            <script>
+                $(document).ready(function () {
+                    $(function () {
+                        $(".add-to-cart").click(function () {
+                            var productId = $('input[name="Id"]').val();
+                            var soLuong = $('#txtsoLuong').val();
+                            $.ajax({
+                                url: '/api/cart/add',
+                                type: "POST",
+                                dataType: "JSON",
+                                data: {
+                                    Id: productId,
+                                    amount: soLuong
+                                },
+                                success: function (response) {
+                                    if (response.result == 'Redirect') {
+                                        window.location = response.url;
+                                    }
+                                    else {
+                                        loadHeaderCart();
+                                        location.reload();
+                                    }
+                                },
+                                error: function (error) {
+                                    alert("There was an error posting the data to the server: " + error.responseText);
+                                }
+                            });
+                        });
+                    });
+
+                    function loadHeaderCart() {
+                        $('#miniCart').load("/AjaxContent/HeaderCart");
+                        $('#numberCart').load("/AjaxContent/NumberCart");
+                    }
+                });
+            </script>
+
+            <script>
+                const input = document.getElementById('txtsoLuong');
+                const minusBtn = document.querySelector('[data-action="minus"]');
+                const plusBtn = document.querySelector('[data-action="plus"]');
+
+                minusBtn.addEventListener('click', () => {
+                    input.value = parseInt(input.value) - 1;
+                });
+
+                plusBtn.addEventListener('click', () => {
+                    input.value = parseInt(input.value) + 1;
+                });
+            </script>
+
+}

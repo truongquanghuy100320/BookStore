@@ -1,0 +1,317 @@
+﻿@using PagedList.Core.Mvc
+@model X.PagedList.StaticPagedList<BookStore.Models.Book>
+
+<!-- your view code here -->
+@{
+    int CurrentPage = ViewBag.CurrentPage != null ? (int)ViewBag.CurrentPage : 1;
+
+    ViewData["Title"] = "List books " + CurrentPage;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Index</h1>
+<div class="page-header">
+    <h2 class="header-title">Book List</h2>
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Books" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <span class="breadcrumb-item active">List of Books :  @ViewBag.pageNumber Page</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row m-b-30">
+            <div class="col-md-8">
+
+                <div class="row">
+                    <div class="col-12">
+                       <form method="get" asp-controller="Books" asp-action="Index">
+                            <div class="row">
+
+                                <div class="col-6 ">
+                                    <div class="form-group">
+                                        <label for="CategoryTourId">Category:</label>
+                                        <select class="custom-select" id="CategoryId" name="CategoryId" style="min-width: 200px;">
+                                            <option value="">Option Category</option>
+                                            <option value="0" selected="@((ViewBag.CategoryId != null && Convert.ToInt32(ViewBag.CategoryId) == 0) ? "selected" : null)">Select all</option>
+
+                                            @if (ViewBag.CategoryList != null)
+                                            {
+                                                @foreach (var category in ViewBag.CategoryList)
+                                                {
+                                                    <option value="@category.Value" selected="@((ViewBag.CategoryId != null && Convert.ToInt32(ViewBag.CategoryId) == Convert.ToInt32(category.Value)) ? "selected" : null)">@category.Text</option>
+
+                                                }
+                                            }
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+                        <form method="get" asp-controller="Books" asp-action="Index">
+                            <div class="row">
+
+                                <div class="col-6 ">
+                                    <div class="form-group">
+                                        <label for="CategoryTourId">Author:</label>
+                                        <select class="custom-select" id="AuthorId" name="AuthorId" style="min-width: 200px;">
+                                            <option value="">Option Author</option>
+                                            <option value="0" selected="@((ViewBag.AuthorId != null && Convert.ToInt32(ViewBag.AuthorId) == 0) ? "selected" : null)">Select all</option>
+
+                                            @if (ViewBag.AuthorList != null)
+                                            {
+                                                @foreach (var category in ViewBag.AuthorList)
+                                                {
+                                                    <option value="@category.Value" selected="@((ViewBag.AuthorId != null && Convert.ToInt32(ViewBag.AuthorId) == Convert.ToInt32(category.Value)) ? "selected" : null)">@category.Text</option>
+
+                                                }
+                                            }
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <div class="input-affix m-v-10">
+                            <i class="prefix-icon anticon anticon-search opacity-04"></i>
+                            <input id="keyword" onkeyup="searchBooks()" name="searchString" type="text" class="form-control" placeholder="Tìm kiếm sách">
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 text-right">
+                <a class="btn btn-primary" asp-area="Admin" asp-controller="Books" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>Add To New</span></a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover e-commerce-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>CatID</th>
+                            <th>AuID</th>
+                            <th>Name</th>
+                            <th>Title</th>                        
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>NameAu</th>
+                            <th>Image</th>
+                            <th>NameCat</th>
+                            <th>Publisher</th>
+                            <th>QTT</th>
+                            <th>Language</th>
+                            <th>PubDate</th>
+                            <th>Note</th>
+                            <th>Isbn10</th>
+                            <th>Isbn13</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @item.CategoryId
+                                    </td>
+                                    <td>
+                                        @item.AuthorId
+                                    </td>
+                                    <td>
+                                       @item.Name
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+
+                                            <h6 class="m-b-0 m-l-10">@Html.Raw(@item.Title)</h6>
+                                        </div>
+                                    </td>
+                                    <td>@item.Description</td>
+                                    <td>@string.Format("{0:#,##0} VND", item.Price)</td>
+                                    <td>@item.NameAuthor</td>
+                                    <td><img src="~/images/tours/@item.Image" alt="Tour Image" width="100px"></td>
+                                    <td>@item.NameCate</td>
+                                    <td>@item.Publisher</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Language</td>
+                                    <td>@item.PublicationDate</td>
+                                    <td>@item.IllustrationsNote</td>
+                                    <td>@item.Isbn10</td>
+                                    <td>@item.Isbn13</td>
+                                    <td>@item.Created</td>
+                                    <td>
+                                        @if (item.Status ?? false)
+
+                                        {
+                                            <div class="d-flex align-items-center">
+                                                <div class="badge badge-success badge-dot m-r-10"></div>
+                                                <div>Stocking</div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex align-items-center">
+                                                <div class="badge badge-success badge-dot m-r-10"></div>
+                                                <div>Out of stock</div>
+                                            </div>
+                                        }
+                                    </td>
+
+
+
+                                    <td>
+                                        <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">Detail</a>
+                                        <a class="btn btn-secondary btn-tone m-r-5" asp-area="Admin" asp-controller="Books" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                        <a class="btn btn-success btn-tone m-r-5" asp-area="Admin" asp-controller="Books" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
+                                </tr>
+
+
+                            }
+                        }
+
+                        </td>
+
+                    </tbody>
+                </table>
+                <div class="pagination-container">
+                    @if (Model != null)
+                    {
+                        <p class="pagination-info">Page @Model.PageNumber of @Model.PageCount, showing @Model.TotalItemCount items</p>
+                    }
+
+                    <ul class="pagination">
+                        @if (Model.HasPreviousPage)
+                        {
+                            <li class="page-item"><a href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" class="page-link">&laquo; Previous</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
+                        }
+
+                        @for (int i = 1; i <= Model.PageCount; i++)
+                        {
+                            if (i == Model.PageNumber)
+                            {
+                                <li class="page-item active"><span class="page-link">@i</span></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a href="@Url.Action("Index", new { page = i })" class="page-link">@i</a></li>
+                            }
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <li class="page-item"><a href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" class="page-link">Next &raquo;</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+                        }
+                    </ul>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts{
+        <script>
+            function searchBooks() {
+                var keyword = $('#keyword').val().toLowerCase();
+                // Gửi yêu cầu AJAX đến action Search trong BooksController để lấy danh sách sách
+                $.ajax({
+                    url: '/Admin/Books/Search',
+                    type: 'GET',
+                    data: { searchString: keyword },
+                    success: function (result) {
+                        // Cập nhật nội dung của bảng danh sách sách
+                        $('#book-list').html(result);
+                    }
+                });
+            }
+        </script>
+
+
+
+
+
+        <script>
+            $(document).ready(function () {
+                $('#CategoryId').on('change', function () {
+                    var categoryId = $(this).val();
+                    var nameCate = $("#CategoryId option:selected").text();
+                    console.log(categoryId);
+                    console.log(nameCate);
+                    $.ajax({
+                        url: '/Admin/Books/Filter',
+                        type: 'POST',
+                        data: { categoryId: categoryId, ameCate: nameCate },
+                        success: function (data) {
+                            if (data.status === 'success') {
+                                window.location.href = data.redirectUrl;
+                            }
+                        },
+                        error: function () {
+                            alert('There was an error while processing your request.');
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#AuthorId').on('change', function () {
+                    var authorId = $(this).val();
+                    var nameAuthor = $("#AuthorId option:selected").text();
+                    console.log(authorId);
+                    console.log(nameAuthor);
+                    $.ajax({
+                        url: '/Admin/Books/Filter2',
+                        type: 'POST',
+                        data: { authorId: authorId, nameAuthor: nameAuthor },
+                        success: function (data) {
+                            if (data.status === 'success') {
+                                window.location.href = data.redirectUrl;
+                            }
+                        },
+                        error: function () {
+                            alert('There was an error while processing your request.');
+                        }
+                    });
+                });
+            });
+        </script>
+
+
+        
+
+       
+
+    }

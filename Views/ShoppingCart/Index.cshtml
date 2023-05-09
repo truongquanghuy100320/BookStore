@@ -1,0 +1,263 @@
+﻿@model List<BookStore.ModelViews.CartItem>
+@{
+    ViewData["Title"] = "View cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var returnUrl = Context.Request.Query["ReturnUrl"];
+}
+<style>
+
+    .quantity-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cart-plus-minus-button {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .cart-plus-minus-box {
+        width: 50px;
+        height: 30px;
+        text-align: center;
+        font-size: 14px;
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        margin: 0 10px;
+        outline: none;
+    }
+
+</style>
+
+<main class="main-content">
+    <div class="breadcrumb-area breadcrumb-height" data-bg-image="~/assets/images/banner/2-1-1920x523.jpg">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-item">
+                        <h2 class="breadcrumb-heading">Cart</h2>
+                        <ul>
+                            <li>
+                                <a asp-controller="Home" asp-action="Index" >Home<i class="pe-7s-angle-right"></i></a>
+                            </li>
+                            <li>Giỏ hàng</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cart-area section-space-y-axis-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        <form action="javascript:void(0)">
+                        <div class="table-content table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="product_remove">Delete</th>
+                                        <th class="product-thumbnail">Avatar</th>
+                                        <th class="cart-product-name">Product</th>
+                                         <th class="product-price">Unit price</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-subtotal">Into money</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.Count() > 0)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="product_remove">
+                                                    <input type="button" value="X" class="removecart btn btn-primary" data-mahh="@item.book.Id" />
+                                                </td>
+                                                <td class="product-thumbnail">
+                                                    <a href="javascript:void(0)">
+                                                            <img src="~/images/tours/@item.book.Image" style="width: 100%; height: 200px; object-fit: cover;">
+                                                    </a>
+                                                </td>
+                                                <td class="product-name"><a href="javascript:void(0)">@item.book.Name</a></td>
+                                                <td class="product-price"><span class="amount">@item.book.Price.Value.ToString("#,##0") VNĐ</span></td>
+                                                  <td class="quantity">
+                                                        <div class="quantity-wrapper">
+                                                            <button data-mahh="@item.book.Id" data-dongia="@item.book.Price" class="cartItem cart-plus-minus-button minus-button">-</button>
+                                                            <input data-mahh="@item.book.Id" data-dongia="@item.book.Price" class="cartItem cart-plus-minus-box" value="@item.amount" min="1" >
+                                                            <button data-mahh="@item.book.Id" data-dongia="@item.book.Price" class="cartItem cart-plus-minus-button plus-button">+</button>
+                                                        </div>
+                                                    </td>
+                                                  
+
+
+                                                <td class="product-subtotal"><span class="amount">@item.TotalMoney.ToString("#,##0") VNĐ</span></td>
+                                            </tr>
+                                        }
+                                     }
+                                </tbody>
+                            </table>
+                        </div>
+                            <div class="row">
+                                <div class="col-md-5 ml-auto">
+                                    <div class="cart-page-total">
+                                        <h2>Total order</h2>
+                                        <ul>
+                                            <li>Into money<span id="total-money">@Model.Sum(x => x.TotalMoney).ToString("#,##0") VNĐ</span></li>
+                                        </ul>
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <a href="/checkout.html" class="btn btn-secondary btn-primary-hover">Payment</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/dang-nhap.html?returnUrl=/checkout.html" class="btn btn-secondary btn-primary-hover">Payment</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                    </form>
+                    }
+                    else {
+                        <p>There are no items in the cart. Please go shopping</p>
+                    }
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(function () {
+        function loadHeaderCart() {
+            $('#miniCart').load("/AjaxContent/HeaderCart");
+            $('#numberCart').load("/AjaxContent/NumberCart");
+        }
+        $(".removecart").click(function () {
+            var productid = $(this).attr("data-mahh");
+            $.ajax({
+                url: "api/cart/remove",
+                type: "POST",
+                dataType: "JSON",
+                data: { Id: productid },
+                success: function (result) {
+                    if (result.success) {
+                        loadHeaderCart();//Reload lai gio hang
+                        location.reload();
+                    }
+                },
+                error: function (rs) {
+                    alert("Remove Cart Error !")
+                }
+            });
+        });
+
+            $(".plus-button").click(function () {
+                var input = $(this).siblings("input.cart-plus-minus-box");
+                var productid = input.attr("data-mahh");
+                var soluong = parseInt(input.val()) + 1;
+                input.val(soluong);
+
+                // Cập nhật giá sản phẩm
+                var dongia = parseInt(input.attr("data-dongia"));
+                var subtotal = soluong * dongia;
+                $(this).closest('tr').find('.product-subtotal .amount').text(subtotal.toLocaleString('vi-VN') + ' VNĐ');
+
+                // Cập nhật tổng giá trị giỏ hàng
+                var total = 0;
+                $('.product-subtotal .amount').each(function () {
+                    var amount = $(this).text().replace(/\D/g, '');
+                    if (amount !== '') {
+                        total += parseInt(amount);
+                    }
+                });
+                $('#total-money').text(total.toLocaleString('vi-VN') + ' VNĐ');
+
+                // Gọi Ajax để cập nhật giỏ hàng
+                $.ajax({
+                    url: "api/cart/update",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        productID: productid,
+                        amount: soluong
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            loadHeaderCart(); // Reload lại giỏ hàng trong header
+                        } else {
+                            alert('Cập nhật giá sản phẩm không thành công');
+                        }
+                    },
+                    error: function (rs) {
+                        alert("Cập nhật Cart Error !")
+                    }
+                });
+            });
+
+
+
+
+
+            $(".minus-button").click(function () {
+                var input = $(this).siblings("input.cart-plus-minus-box");
+                var productid = input.attr("data-mahh");
+                var soluong = parseInt(input.val()) - 1;
+                input.val(soluong);
+
+                // Cập nhật giá sản phẩm
+                var dongia = parseInt(input.attr("data-dongia"));
+                var subtotal = soluong * dongia;
+                $(this).closest('tr').find('.product-subtotal .amount').text(subtotal.toLocaleString('vi-VN') + ' VNĐ');
+
+                // Cập nhật tổng giá trị giỏ hàng
+                var total = 0;
+                $('.product-subtotal .amount').each(function () {
+                    var amount = $(this).text().replace(/\D/g, '');
+                    if (amount !== '') {
+                        total += parseInt(amount);
+                    }
+                });
+                $('#total-money').text(total.toLocaleString('vi-VN') + ' VNĐ');
+
+                // Gọi Ajax để cập nhật giỏ hàng
+                $.ajax({
+                    url: "api/cart/update",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {
+                        productID: productid,
+                        amount: soluong
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            loadHeaderCart(); // Reload lại giỏ hàng trong header
+                        } else {
+                            alert('Cập nhật giá sản phẩm không thành công');
+                        }
+                    },
+                    error: function (rs) {
+                        alert("Cập nhật Cart Error !")
+                    }
+                });
+            });
+
+
+    });
+</script>
+}

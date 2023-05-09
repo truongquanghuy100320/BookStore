@@ -1,0 +1,89 @@
+﻿@model BookStore.Models.Payment
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" asp-controller="Payments" asp-route-id="@Model.PaymentId" method="post" onsubmit="return validateForm()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PaymentId" />
+            <div class="form-group">
+                <label asp-for="PaymentMethod" class="control-label"></label>
+                <input asp-for="PaymentMethod" class="form-control" />
+                <div id="paymentMethodError" class="text-danger"></div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="PaymentDescription" class="control-label"></label>
+                <input asp-for="PaymentDescription" class="form-control" />
+                <div id="paymentDescriptionError" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentInfo" class="control-label"></label>
+                <textarea id="PaymentInfo" type="text" class="form-control" name="PaymentInfo" asp-for="PaymentInfo"> </textarea>
+                <div id="paymentInfoError" class="text-danger"></div>
+
+            </div>
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <link rel="stylesheet" href="//cdn.ckeditor.com/4.16.0/standard/ckeditor.css">
+
+    <script src="//cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+
+    <script>
+        CKEDITOR.replace('PaymentInfo');
+                //CKEDITOR.replace('Name');
+    </script>
+    <script>
+        function validateForm() {
+            var paymentMethod = document.forms["form"]["PaymentMethod"].value;
+            var paymentDescription = document.forms["form"]["PaymentDescription"].value;
+            var paymentInfo = document.forms["form"]["PaymentInfo"].value;
+
+            var paymentMethodError = document.getElementById("paymentMethodError");
+            var paymentDescriptionError = document.getElementById("paymentDescriptionError");
+            var paymentInfoError = document.getElementById("paymentInfoError");
+
+            if (paymentMethod == "") {
+                paymentMethodError.innerHTML = "Please enter a payment method";
+                return false;
+            } else {
+                paymentMethodError.innerHTML = "";
+            }
+
+            if (paymentDescription == "") {
+                paymentDescriptionError.innerHTML = "Please enter a payment description";
+                return false;
+            } else {
+                paymentDescriptionError.innerHTML = "";
+            }
+
+            if (paymentInfo == "") {
+                paymentInfoError.innerHTML = "Please enter payment information";
+                return false;
+            } else {
+                paymentInfoError.innerHTML = "";
+            }
+        }
+    </script>
+}

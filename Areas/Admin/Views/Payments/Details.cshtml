@@ -1,0 +1,51 @@
+﻿@model BookStore.Models.Payment
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a class="breadcrumb-item" asp-area="Admin" asp-controller="Payments" asp-action="Index">List of payments</a>
+            <span class="breadcrumb-item active">Edit users</span>
+        </nav>
+    </div>
+</div>
+<div class="card-body">
+    <h4 class="card-title">Detail Payments</h4>
+    <div class="table-responsive">
+        <table class="product-info-table m-t-20">
+            <tbody>
+                <tr>
+                    <td>ID:</td>
+                    <td class="text-dark font-weight-semibold">@Model.PaymentId</td>
+                </tr>
+                <tr>
+                    <td>Payment Method:</td>
+                    <td>@Model.PaymentMethod</td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td>@Model.PaymentDescription</td>
+                </tr>
+                <tr>
+                    <td>Payment Info:</td>
+                    <td>@Model.PaymentInfo</td>
+                </tr>
+                <tr>
+                    <td>Created</td>
+                    <td>@Model.Created</td>
+                </tr>
+                <tr>
+                    <td>Updated</td>
+                    <td>@Model.Updated</td>
+                </tr>
+
+               
+            </tbody>
+        </table>
+    </div>
+</div>

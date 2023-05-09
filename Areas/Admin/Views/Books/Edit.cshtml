@@ -1,0 +1,310 @@
+﻿@model BookStore.Models.Book
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a class="breadcrumb-item" asp-area="Admin" asp-controller="Books" asp-action="Index">List of Books</a>
+            <span class="breadcrumb-item active">Add new blogs</span>
+        </nav>
+    </div>
+</div>
+
+<form asp-action="Edit" asp-route-id="@Model.Id" asp-controller="Books" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <input type="submit" value="Update" class="btn btn-primary" />
+    </div>
+
+    <div class="tab-content m-t-15">
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="font-weight-semibold" for="Title">Title</label>
+                    <textarea id="Title" type="text" class="form-control" name="Title" asp-for="Title"> </textarea>
+                    <span id="TitleError" style="color:red"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="font-weight-semibold" for="Title">Name</label>
+                    <textarea id="Name" type="text" class="form-control" name="Name" asp-for="Name"> </textarea>
+                    <span id="NameError" style="color:red"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <label for="CategoryTourId">Danh mục:</label>
+                <select class="custom-select" id="CategoriesId" name="CategoryId" asp-for="CategoryId" asp-items="@ViewBag.CategoryList" style="min-width: 200px;">
+                    <option value="">Chọn danh mục</option>
+                </select>
+            </div>
+
+            <div class="form-group col-6">
+                <label class="font-weight-semibold" for="CatNameBlog">NameCate</label>
+                <input type="text" id="NameCate" class="form-control" asp-for="NameCate" id="NameCate" readonly>
+                <span id="NameCateError" style="color:red"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-6">
+                <label for="CategoryTourId">Author:</label>
+                <select class="custom-select" id="AuthorId" name="AuthorId" asp-for="AuthorId" asp-items="@ViewBag.AuthorList" style="min-width: 200px;">
+                    <option value="">Chọn Author</option>
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <label class="font-weight-semibold" for="CatNameBlog">NameAuthor</label>
+                <input type="text" class="form-control" asp-for="NameAuthor" id="NameAuthor" readonly>
+                <span id="NameAuthorError" style="color:red"></span>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="form-group col-6">
+                <label class="font-weight-semibold" for="EmptySeat">Description</label>
+                <input id="Description" type="text" class="form-control" asp-for="Description">
+                <span id="DescriptionError" style="color:red"></span>
+            </div>
+            <div class="form-group col-6">
+
+                <label class="font-weight-semibold" for="PointOfDeparture">Price</label>
+                <input id="Price" type="text" class="form-control" asp-for="Price">
+                <span id="PriceError" style="color:red"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+
+                <label class="font-weight-semibold" for="PointOfDeparture">Publisher</label>
+                <input id="Publisher" type="text" class="form-control" asp-for="Publisher">
+                <span id="PublisherError" style="color:red"></span>
+            </div>
+            <div class="form-group col-6">
+                <label asp-for="PublicationDate" class="control-label"></label>
+                <input asp-for="PublicationDate" class="form-control" />
+                <span asp-validation-for="PublicationDate" class="text-danger"></span>
+            </div>
+
+        </div>
+       @* <div class="form-group">
+            <label class="font-weight-semibold" for="productBrand">Ảnh đại diện</label>
+            <input name="fImage" type="file" class="form-control-file" asp-for="Image" onchange="previewImage(this)" />
+            <img id="imagePreview" src="#" alt="Ảnh đại diện" style="max-width: 200px; max-height: 200px; display: none;" />
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>*@
+        <div class="form-group">
+            <label class="font-weight-semibold" for="productBrand">Ảnh đại diện</label>
+            <input name="fImage" type="file" class="form-control-file" asp-for="Image" onchange="previewImage(this)" />
+            @if (!string.IsNullOrEmpty(Model.Image))
+            {
+                <img id="imagePreview" src="@Url.Content("~/images/tours/" + Model.Image)" alt="Ảnh đại diện" style="max-width: 200px; max-height: 200px; display: block;" />
+            }
+            else
+            {
+                <img id="imagePreview" src="#" alt="Ảnh đại diện" style="max-width: 200px; max-height: 200px; display: none;" />
+            }
+            <span asp-validation-for="Image" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-6">
+                <label class="font-weight-semibold" for="EmptySeat">Quantity</label>
+                <input id="Quantity" type="text" class="form-control" asp-for="Quantity">
+                <span id="QuantityError" style="color:red"></span>
+            </div>
+            <div class="form-group col-6">
+
+                <label class="font-weight-semibold" for="PointOfDeparture">Language</label>
+                <input id="Language" type="text" class="form-control" asp-for="Language">
+                <span id="LanguageError" style="color:red"></span>
+            </div>
+        </div>
+        @*    <div class="row">
+        <div class="form-group col-6">
+        <label asp-for="PublicationDate" class="control-label"></label>
+        <input asp-for="PublicationDate" class="form-control" />
+        <span asp-validation-for="PublicationDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-6">
+        <label asp-for="Created" class="control-label"></label>
+        <input asp-for="Created" class="form-control" />
+        <span asp-validation-for="Created" class="text-danger"></span>
+        </div>
+        </div>*@
+        <div class="row">
+            <div class="form-group col-6">
+                <label class="font-weight-semibold" for="EmptySeat">Isbn10</label>
+                <input id="Isbn10" type="text" class="form-control" asp-for="Isbn10">
+                <span id="Isbn10Error" style="color:red"></span>
+            </div>
+            <div class="form-group col-6">
+
+                <label class="font-weight-semibold" for="PointOfDeparture">Isbn13</label>
+                <input id="Isbn13" type="text" class="form-control" asp-for="Isbn13">
+                <span id="Isbn13Error" style="color:red"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-6">
+                <label class="font-weight-semibold" for="tourStatus">Status</label>
+                <select id="Status" class="custom-select" asp-for="Status" style="min-width: 200px;">
+                    <option value="True">Stocking</option>
+                    <option value="False">Out of stock</option>
+                </select>
+            </div>
+
+            <div class="form-group col-6">
+
+                <label class="font-weight-semibold" for="PointOfDeparture">IllustrationsNote</label>
+                <input id="IllustrationsNote" type="text" class="form-control" asp-for="IllustrationsNote">
+                <span id="IllustrationsNote" style="color:red"></span>
+            </div>
+        </div>
+</form>
+
+@section Scripts {
+
+    <link rel="stylesheet" href="//cdn.ckeditor.com/4.16.0/standard/ckeditor.css">
+
+    <script src="//cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+
+    <script>
+        CKEDITOR.replace('Title');
+       // CKEDITOR.replace('Name');
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Lấy giá trị ban đầu của các trường văn bản readonly
+            var nameCate = $("#NameCate").val();
+            var nameAuthor = $("#NameAuthor").val();
+            var discountPercent = $("#DiscountPercent").val();
+
+            // Thiết lập sự kiện thay đổi cho các danh sách thả xuống
+            $("#CategoriesId").change(function () {
+                // Lấy giá trị đã chọn từ danh sách
+                var categoryId = $(this).val();
+                // Lấy tên của danh mục từ option được chọn
+                var categoryName = $("#CategoriesId option:selected").text();
+                // Gán giá trị cho trường văn bản readonly
+                $("#NameCate").val(categoryName);
+            });
+
+            $("#AuthorId").change(function () {
+                var authorId = $(this).val();
+                var authorName = $("#AuthorId option:selected").text();
+                $("#NameAuthor").val(authorName);
+            });
+
+            $("#SaleId").change(function () {
+                var saleId = $(this).val();
+                var discount = $("#SaleId option:selected").text();
+                $("#DiscountPercent").val(discount);
+            });
+
+        });
+    </script>
+
+
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+
+  
+
+
+
+
+    <script>
+        function validateForm() {
+            let title = document.getElementById("Title").value;
+            let name = document.getElementById("Name").value;
+            let description = document.getElementById("Description").value;
+            let price = document.getElementById("Price").value;
+            let publisher = document.getElementById("Publisher").value;
+            let quantity = document.getElementById("Quantity").value;
+            let language = document.getElementById("Language").value;
+            let isbn10 = document.getElementById("Isbn10").value;
+            let isbn13 = document.getElementById("Isbn13").value;
+            let status = document.getElementById("Status").value;
+            let illustrationsNote = document.getElementById("IllustrationsNote").value;
+            let countErrors = 0;
+
+            // Kiểm tra và hiển thị thông báo lỗi cho các trường còn thiếu
+            if (name == "") {
+                document.getElementById("NameError").innerHTML = "Please enter a name";
+                return false;
+            }
+
+            if (title == "") {
+                document.getElementById("TitleError").innerHTML = "Please enter a title";
+                return false;
+            }
+
+            if (description == "") {
+                document.getElementById("DescriptionError").innerHTML = "Please enter a description";
+                return false;
+            }
+            if (price == "") {
+                document.getElementById("PriceError").innerHTML = "Please enter price";
+                return false;
+            }
+            if (publisher == "") {
+                document.getElementById("PublisherError").innerHTML = "Please enter publisher";
+                return false;
+            }
+            if (quantity == "") {
+                document.getElementById("QuantityError").innerHTML = "Please enter quantity";
+                return false;
+            }
+            if (language == "") {
+                document.getElementById("LanguageError").innerHTML = "Please enter language";
+                return false;
+            }
+            if (isbn10 == "") {
+                document.getElementById("Isbn10Error").innerHTML = "Please enter ISBN-10";
+                return false;
+            }
+            if (isbn13 == "") {
+                document.getElementById("Isbn13Error").innerHTML = "Please enter ISBN-13";
+                return false;
+            }
+            if (illustrationsNote == "") {
+                document.getElementById("IllustrationsNoteError").innerHTML = "Please enter a note about the illustration";
+                return false;
+            }
+
+            // Nếu không có trường nào bị thiếu thì cho phép submit form
+            return true;
+        }
+
+
+
+    </script>
+
+                        }
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

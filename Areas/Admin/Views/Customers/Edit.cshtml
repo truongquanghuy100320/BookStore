@@ -1,0 +1,156 @@
+﻿@using Newtonsoft.Json;
+@using System.Text;
+@using BookStore.Extention;
+@model BookStore.Models.Customer
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a class="breadcrumb-item" asp-area="Admin" asp-controller="Customers" asp-action="Index">List of Users</a>
+            <span class="breadcrumb-item active">Edit users</span>
+        </nav>
+    </div>
+</div>
+
+        <form asp-action="Edit" asp-controller="Customers" asp-route-id="@Model.CustomerId" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CustomerId" />
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+    <div class="form-group">
+        <label asp-for="Address" class="control-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label"></label>
+        <input id="password-input" asp-for="Password" class="form-control" value="" required />
+        <span asp-validation-for="Password" class="text-danger"></span>
+        <span id="passwordMessage" class="text-danger"></span>
+    </div>
+
+
+
+
+
+
+    @{
+        var httpContext = ViewContext.HttpContext;
+        UserLogin session = null; // declare and initialize session
+        if (httpContext.Session.TryGetValue(Func.USER_SESSION, out byte[] value))
+        {
+            session = JsonConvert.DeserializeObject<UserLogin>(Encoding.ASCII.GetString(value));
+        }
+    }
+
+    @if (session != null && session.Role == 1)
+    {
+        <div class="form-group">
+            <label asp-for="Role" class="control-label"></label>
+            <select asp-for="Role" class="form-control" id="Role" onchange="updateDescription()">
+                <option value="1">Super Admin</option>
+                <option value="2">Admin</option>
+                <option value="3">User</option>
+            </select>
+        </div>
+    }
+    else if (session != null && session.Role == 2)
+    {
+        <div class="form-group">
+            <label asp-for="Role" class="control-label"></label>
+            <select asp-for="Role" class="form-control" id="Role" onchange="updateDescription()">
+                <option value="2">Admin</option>
+                <option value="3">User</option>
+            </select>
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <label asp-for="Role" class="control-label"></label>
+            <select asp-for="Role" class="form-control" id="Role" onchange="updateDescription()">
+                <option value="3">User</option>
+            </select>
+        </div>
+    }
+
+
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" id="Description" readonly />
+    </div>
+
+    <select asp-for="Active" class="form-control">
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+    </select>
+            <br />
+            <div class="form-group">
+        <input type="submit" value="Update" class="btn btn-primary" onclick="handleUpdateButtonClick()" />
+            </div>
+        </form>
+
+@section Scripts {
+<script>
+    function updateDescription() {
+        var role = document.getElementById("Role").value;
+        var description = document.getElementById("Description");
+
+        if (role == "1") {
+            description.value = "Super Admin";
+        } else if (role == "2") {
+            description.value = "Admin";
+        } else if (role == "3") {
+            description.value = "User";
+        }
+    }
+</script>
+    <script>
+        // Lấy thẻ input và span chứa thông báo
+        var passwordInput = document.getElementById("password-input");
+        var passwordMessage = document.getElementById("passwordMessage");
+
+        // Xóa giá trị của trường password và hiển thị thông báo yêu cầu nhập lại
+        passwordInput.value = "";
+        passwordMessage.innerHTML = "You need to re-enter your password before updating. Because of this feature post development";
+
+        // Hàm xử lý khi người dùng nhấn nút update
+        function handleUpdateButtonClick() {
+            // Kiểm tra xem trường password có giá trị hay không
+            if (passwordInput.value.trim() !== "") {
+                // Nếu có giá trị, tạo salt mới và mã hóa password
+                var salt = Utilities.GetRandomKey().trim();
+                if (salt !== "") {
+                    passwordInput.value = (passwordInput.value + salt).ToMD5();
+                }
+            }
+            else {
+                // Nếu không có giá trị, hiển thị thông báo yêu cầu nhập lại
+                passwordMessage.innerHTML = "You need to re-enter your password before updating. Because of this feature post development";
+            }
+        }
+    </script>
+
+  
+}
